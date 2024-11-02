@@ -181,82 +181,91 @@ export default function Home() {
   );
 
   return (
-    <div>
-      <h1>World Bot API</h1>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <h1 style={{ margin: '20px 0' }}>World Bot API</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
-          <table
-            {...getTableProps()}
-            style={{ border: '2px solid Navy', width: '100%', marginBottom: '20px', textAlign: 'center' }}
+          <div
+            style={{
+              flex: '1',
+              overflow: 'auto', // Make the table scrollable
+              border: '2px solid Navy',
+              marginBottom: '20px',
+            }}
           >
-<thead>
-  {headerGroups.map((headerGroup) => (
-    <tr
-      {...headerGroup.getHeaderGroupProps()}
-      style={{
-        background: 'Navy', // Change background color to Navy
-        color: 'White', // Change font color to White
-      }}
-    >
-      {headerGroup.headers.map((column) => (
-        <th
-          {...column.getHeaderProps(column.getSortByToggleProps())}
-          style={{
-            border: '2px solid Gold', // Keep or modify the border color as needed
-            padding: '5px',
-            cursor: 'pointer',
-            textAlign: 'center',
-            color: 'White', // Ensure font color is White
-          }}
-        >
-          {column.render('Header')}
-          <span>
-            {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-          </span>
-        </th>
-      ))}
-    </tr>
-  ))}
-</thead>
-
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
+            <table
+              {...getTableProps()}
+              style={{ width: '100%', textAlign: 'center' }}
+            >
+              <thead
+                style={{
+                  position: 'sticky',
+                  top: '0', // Fix the header at the top
+                  background: 'Navy', // Keep background color for visibility
+                  color: 'White', // Font color
+                  zIndex: '1', // Ensure the header is above the table rows
+                }}
+              >
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
                         style={{
-                          border: '0.5px solid Grey',
+                          border: '2px solid Gold',
                           padding: '5px',
-                          height: '20px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
+                          cursor: 'pointer',
                           textAlign: 'center',
                         }}
                       >
-                        <div
-                          style={{
-                            maxHeight: '100%',
-                            overflowY: 'auto',
-                            whiteSpace: 'normal',
-                            height: '100%',
-                          }}
-                        >
-                          {cell.render('Cell')}
-                        </div>
-                      </td>
+                        {column.render('Header')}
+                        <span>
+                          {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                        </span>
+                      </th>
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td
+                          {...cell.getCellProps()}
+                          style={{
+                            border: '0.5px solid Grey',
+                            padding: '5px',
+                            height: '20px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <div
+                            style={{
+                              maxHeight: '100%',
+                              overflowY: 'auto',
+                              whiteSpace: 'normal',
+                              height: '100%',
+                            }}
+                          >
+                            {cell.render('Cell')}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ marginTop: '20px' }}>
             <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
               {'<<'}
             </button>{' '}
@@ -290,4 +299,6 @@ export default function Home() {
       )}
     </div>
   );
+  
+  
 }
