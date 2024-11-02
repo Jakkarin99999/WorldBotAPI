@@ -6,6 +6,7 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterConditions, setFilterConditions] = useState({});
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,13 +49,28 @@ export default function Home() {
 
   const filteredData = React.useMemo(() => {
     return data.filter((row) => {
+      // Iterate through all filter conditions and apply them with an "AND" logic
       for (const [column, { condition, value }] of Object.entries(filterConditions)) {
-        if (condition === 'exact' && row[column] !== value) return false;
-        if (condition === 'contain' && !row[column]?.includes(value)) return false;
+        if (!value) continue; // Skip if there is no value for the filter
+  
+        // Convert the value to a number for comparison
+        const numericValue = Number(value);
+        if (isNaN(numericValue)) continue; // Skip non-numeric values
+  
+        // Apply the filter based on the condition
+        if (condition === '=') {
+          if (row[column] !== numericValue) return false; // Check for exact match
+        } else if (condition === '>') {
+          if (row[column] <= numericValue) return false; // Check if greater than value
+        } else if (condition === '<') {
+          if (row[column] >= numericValue) return false; // Check if less than value
+        }
       }
-      return true;
+      return true; // Only return rows that satisfy all conditions
     });
   }, [data, filterConditions]);
+  
+  
 
   const textColumns = ['ea_token', 'symbols', 'platform'];
   const numericColumns = [
@@ -73,14 +89,13 @@ export default function Home() {
     if (data.length === 0) return [];
 
     const botRankingColumn = {
-        Header: 'Bot Ranking',
-        accessor: 'bot_ranking',
-        Cell: ({ row, state: { pageIndex, pageSize } }) => row.index + 1 + pageIndex * pageSize, // Fixed
-      };
-      
+      Header: 'Bot Ranking',
+      accessor: 'bot_ranking',
+      Cell: ({ row, state: { pageIndex, pageSize } }) => row.index + 1 + pageIndex * pageSize,
+    };
 
     const aiScoreColumn = {
-      Header: 'AI_Score', // Rename total_ai to AI_Score
+      Header: 'AI_Score',
       accessor: 'total_ai',
     };
 
@@ -114,7 +129,7 @@ export default function Home() {
                     handleFilterChange(key, filterConditions[key]?.condition || '=', e.target.value)
                   }
                   value={filterConditions[key]?.value || ''}
-                  style={{ width: '60px' }}
+                  style={{ width: '80px', textAlign: 'center' }}
                 />
               </div>
             )}
@@ -134,7 +149,7 @@ export default function Home() {
                     handleFilterChange(key, filterConditions[key]?.condition || 'exact', e.target.value)
                   }
                   value={filterConditions[key]?.value || ''}
-                  style={{ width: '120px' }}
+                  style={{ width: '120px', TextAlign: 'center'  }}
                 />
               </div>
             )}
@@ -168,12 +183,7 @@ export default function Home() {
       initialState: {
         pageIndex: 0,
         pageSize: 100,
-        sortBy: [
-          {
-            id: 'total_ai', // Sort by total_ai
-            desc: true, // Descending order
-          },
-        ],
+        sortBy: [{ id: 'total_ai', desc: true }],
       },
     },
     useSortBy,
@@ -182,123 +192,140 @@ export default function Home() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <h1 style={{ margin: '20px 0' }}>World Bot API</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <div
-            style={{
-              flex: '1',
-              overflow: 'auto', // Make the table scrollable
-              border: '2px solid Navy',
-              marginBottom: '20px',
-            }}
-          >
-            <table
-              {...getTableProps()}
-              style={{ width: '100%', textAlign: 'center' }}
-            >
-              <thead
+      <h1
+        style={{ margin: '20px 0', cursor: 'pointer' }}
+        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+      >
+        World Bot API
+      </h1>
+      <div style={{ display: 'flex', height: '100%' }}>
+        {isSidebarVisible && (
+          <div className="sidebar" style={{ width: '250px', backgroundColor: '#333', color: '#fff', padding: '20px' }}>
+            <button>Performance</button>
+            <button>Bot Buffet API</button>
+            <button>Tutorial</button>
+            <button>Download</button>
+            <button>BT Ranking</button>
+            <button>Ask AI</button>
+            <button>Upgrade</button>
+            <button>Contact</button>
+          </div>
+        )}
+        <div style={{ flex: 1, padding: '20px' }}>
+          {/* Main content and table */}
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <div
                 style={{
-                  position: 'sticky',
-                  top: '0', // Fix the header at the top
-                  background: 'Navy', // Keep background color for visibility
-                  color: 'White', // Font color
-                  zIndex: '1', // Ensure the header is above the table rows
+                  flex: '1',
+                  overflow: 'auto', // Make the table scrollable
+                  border: '2px solid Navy',
+                  marginBottom: '20px',
                 }}
               >
-                {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        style={{
-                          border: '2px solid Gold',
-                          padding: '5px',
-                          cursor: 'pointer',
-                          textAlign: 'center',
-                        }}
-                      >
-                        {column.render('Header')}
-                        <span>
-                          {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => (
-                        <td
-                          {...cell.getCellProps()}
-                          style={{
-                            border: '0.5px solid Grey',
-                            padding: '5px',
-                            height: '20px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            textAlign: 'center',
-                          }}
-                        >
-                          <div
+                <table {...getTableProps()} style={{ width: '100%', textAlign: 'center' }}>
+                  <thead
+                    style={{
+                      position: 'sticky',
+                      top: '0',
+                      background: 'Navy',
+                      color: 'White',
+                      zIndex: '1',
+                    }}
+                  >
+                    {headerGroups.map((headerGroup) => (
+                      <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column) => (
+                          <th
+                            {...column.getHeaderProps(column.getSortByToggleProps())}
                             style={{
-                              maxHeight: '100%',
-                              overflowY: 'auto',
-                              whiteSpace: 'normal',
-                              height: '100%',
+                              border: '2px solid Gold',
+                              padding: '5px',
+                              cursor: 'pointer',
+                              textAlign: 'center',
                             }}
                           >
-                            {cell.render('Cell')}
-                          </div>
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ marginTop: '20px' }}>
-            <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-              {'<<'}
-            </button>{' '}
-            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-              {'<'}
-            </button>{' '}
-            <button onClick={() => nextPage()} disabled={!canNextPage}>
-              {'>'}
-            </button>{' '}
-            <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-              {'>>'}
-            </button>{' '}
-            <span>
-              Page{' '}
-              <strong>
-                {pageIndex + 1} of {pageOptions.length}
-              </strong>{' '}
-            </span>
-            <select
-              value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-            >
-              {[10, 20, 50, 100].map((size) => (
-                <option key={size} value={size}>
-                  Show {size}
-                </option>
-              ))}
-            </select>
-          </div>
-        </>
-      )}
+                            {column.render('Header')}
+                            <span>
+                              {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                            </span>
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    {page.map((row) => {
+                      prepareRow(row);
+                      return (
+                        <tr {...row.getRowProps()}>
+                          {row.cells.map((cell) => (
+                            <td
+                              {...cell.getCellProps()}
+                              style={{
+                                border: '0.5px solid Grey',
+                                padding: '5px',
+                                height: '20px',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                textAlign: 'center',
+                              }}
+                            >
+                              <div
+                                style={{
+                                  maxHeight: '100%',
+                                  overflowY: 'auto',
+                                  whiteSpace: 'normal',
+                                  height: '100%',
+                                }}
+                              >
+                                {cell.render('Cell')}
+                              </div>
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ marginTop: '20px' }}>
+                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                  {'<<'}
+                </button>{' '}
+                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                  {'<'}
+                </button>{' '}
+                <button onClick={() => nextPage()} disabled={!canNextPage}>
+                  {'>'}
+                </button>{' '}
+                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                  {'>>'}
+                </button>{' '}
+                <span>
+                  Page{' '}
+                  <strong>
+                    {pageIndex + 1} of {pageOptions.length}
+                  </strong>{' '}
+                </span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                >
+                  {[10, 20, 50, 100].map((size) => (
+                    <option key={size} value={size}>
+                      Show {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
-  
-  
 }
