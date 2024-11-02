@@ -212,20 +212,43 @@ const buttonStyle = {
         style={{ margin: '20px 0', textAlign: 'center' }}
         onClick={() => setIsSidebarVisible(!isSidebarVisible)}
       >
-        World Bot API
+        World Bot Rank
       </h1>
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {isSidebarVisible && (
-            <div className="sidebar" style={{ width: '150px', backgroundColor: '#333', color: '#fff', padding: '20px' }}>
-  <button style={buttonStyle}>Performance</button>
-  <button style={buttonStyle}>Bot Buffet API</button>
-  <button style={buttonStyle}>Tutorial</button>
-  <button style={buttonStyle}>Download</button>
-  <button style={buttonStyle}>BT Ranking</button>
-  <button style={buttonStyle}>Ask AI</button>
-  <button style={buttonStyle}>Upgrade</button>
-  <button style={buttonStyle}>Contact</button>
+            <div
+  className="sidebar"
+  style={{
+    width: '250px',
+    backgroundColor: '#333',
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100vh',
+    padding: '20px',
+    boxSizing: 'border-box',
+  }}
+>
+  {/* Top Buttons */}
+  <div style={{ flex: '1' }}>
+    <button style={buttonStyle}>Performance</button>
+    <button style={buttonStyle}>Bot Buffet API</button>
+    <button style={buttonStyle}>Tutorial</button>
+    <button style={buttonStyle}>Download</button>
+    <button style={buttonStyle}>BT Ranking</button>
+    <button style={buttonStyle}>Ask AI</button>
+  </div>
+
+  {/* Bottom Buttons */}
+  <div style={{ marginBottom: '80px' }}> {/* Add margin to lift buttons up */}
+    <button style={buttonStyle}>Upgrade</button>
+    <button style={buttonStyle}>Settings</button>
+    <button style={buttonStyle}>Contact</button>
+  </div>
 </div>
+
+
 
         )}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
