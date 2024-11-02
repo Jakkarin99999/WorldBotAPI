@@ -44,49 +44,63 @@ export default function Home() {
       ...prev,
       [column]: { condition, value },
     }));
-  };
+  };  
 
-  const filteredData = React.useMemo(() => {
-    return data.filter((row) => {
-      for (const [column, { condition, value }] of Object.entries(filterConditions)) {
-        if (!value) continue;
+// Declare textColumns and numericColumns first
+const textColumns = ['ea_token', 'symbols', 'platform'];
+const numericColumns = [
+  'id', 'time_frame', 'bal_start', 'bal_end', 'eq_start', 'eq_end', 'days', 'max_dd',
+  'a_val', 'b_val', 'c_val', 'd_val', 'e_val', 'profit', 'gross_profit', 'gross_loss',
+  'max_profit_trade', 'max_loss_trade', 'con_profit_max', 'con_profit_max_trades', 'max_con_wins',
+  'max_con_profit_trades', 'con_loss_max', 'con_loss_max_trades', 'max_con_losses',
+  'max_con_loss_trades', 'balance_min', 'balance_dd', 'balance_dd_percent', 'balance_dd_rel_percent',
+  'balance_dd_relative', 'equity_min', 'equity_dd', 'equity_dd_percent', 'equity_dd_rel_percent',
+  'equity_dd_relative', 'expected_payoff', 'profit_factor', 'min_margin_level', 'trades',
+  'profit_trades', 'loss_trades', 'short_trades', 'long_trades', 'profit_short_trades',
+  'profit_long_trades', 'profit_trades_avg_con', 'loss_trades_avg_con'
+];
+
+// Now, you can define filteredData
+const filteredData = React.useMemo(() => {
+  return data.filter((row) => {
+    // Iterate through all filter conditions and apply them
+    for (const [column, { condition, value }] of Object.entries(filterConditions)) {
+      if (!value) continue; // Skip if there is no value for the filter
+
+      // Handle text columns
+      if (textColumns.includes(column)) {
+        if (condition === 'exact' && row[column] !== value) return false;
+        if (condition === 'contain' && !row[column]?.includes(value)) return false;
+      }
+      // Handle numeric columns
+      else if (numericColumns.includes(column)) {
         const numericValue = Number(value);
-        if (isNaN(numericValue)) continue;
+        if (isNaN(numericValue)) continue; // Skip non-numeric values
         if (condition === '=' && row[column] !== numericValue) return false;
         if (condition === '>' && row[column] <= numericValue) return false;
         if (condition === '<' && row[column] >= numericValue) return false;
       }
-      return true;
-    });
-  }, [data, filterConditions]);
+    }
+    return true; // Only return rows that satisfy all conditions
+  });
+}, [data, filterConditions]);
 
-  const textColumns = ['ea_token', 'symbols', 'platform'];
-  const numericColumns = [
-    'id', 'time_frame', 'bal_start', 'bal_end', 'eq_start', 'eq_end', 'days', 'max_dd',
-    'a_val', 'b_val', 'c_val', 'd_val', 'e_val', 'profit', 'gross_profit', 'gross_loss',
-    'max_profit_trade', 'max_loss_trade', 'con_profit_max', 'con_profit_max_trades', 'max_con_wins',
-    'max_con_profit_trades', 'con_loss_max', 'con_loss_max_trades', 'max_con_losses',
-    'max_con_loss_trades', 'balance_min', 'balance_dd', 'balance_dd_percent', 'balance_dd_rel_percent',
-    'balance_dd_relative', 'equity_min', 'equity_dd', 'equity_dd_percent', 'equity_dd_rel_percent',
-    'equity_dd_relative', 'expected_payoff', 'profit_factor', 'min_margin_level', 'trades',
-    'profit_trades', 'loss_trades', 'short_trades', 'long_trades', 'profit_short_trades',
-    'profit_long_trades', 'profit_trades_avg_con', 'loss_trades_avg_con'
-  ];
+
 
   const columns = React.useMemo(() => {
     if (data.length === 0) return [];
-
+  
     const botRankingColumn = {
       Header: 'Bot Ranking',
       accessor: 'bot_ranking',
       Cell: ({ row, state: { pageIndex, pageSize } }) => row.index + 1 + pageIndex * pageSize,
     };
-
+  
     const aiScoreColumn = {
       Header: 'AI_Score',
       accessor: 'total_ai',
     };
-
+  
     const otherColumns = Object.keys(data[0])
       .filter(
         (key) =>
@@ -100,6 +114,26 @@ export default function Home() {
         Header: (
           <div>
             {key}
+            {textColumns.includes(key) && (
+              <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
+                <select
+                  onChange={(e) =>
+                    handleFilterChange(key, e.target.value, filterConditions[key]?.value || '')
+                  }
+                >
+                  <option value="exact">Exact</option>
+                  <option value="contain">Contain</option>
+                </select>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    handleFilterChange(key, filterConditions[key]?.condition || 'exact', e.target.value)
+                  }
+                  value={filterConditions[key]?.value || ''}
+                  style={{ width: '120px', textAlign: 'center' }}
+                />
+              </div>
+            )}
             {numericColumns.includes(key) && (
               <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
                 <select
@@ -121,33 +155,14 @@ export default function Home() {
                 />
               </div>
             )}
-            {textColumns.includes(key) && (
-              <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
-                <select
-                  onChange={(e) =>
-                    handleFilterChange(key, e.target.value, filterConditions[key]?.value || '')
-                  }
-                >
-                  <option value="exact">Exact</option>
-                  <option value="contain">Contain</option>
-                </select>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    handleFilterChange(key, filterConditions[key]?.condition || 'exact', e.target.value)
-                  }
-                  value={filterConditions[key]?.value || ''}
-                  style={{ width: '120px', textAlign: 'center' }}
-                />
-              </div>
-            )}
           </div>
         ),
         accessor: key,
       }));
-
+  
     return [botRankingColumn, aiScoreColumn, ...otherColumns];
   }, [data, filterConditions]);
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -176,6 +191,20 @@ export default function Home() {
     useSortBy,
     usePagination
   );
+// Add this at the top of your Home component, before the return statement
+const buttonStyle = {
+    width: '100%',
+    padding: '10px',
+    margin: '5px 0',
+    backgroundColor: '#444',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    transition: 'background-color 0.3s',
+    
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -187,16 +216,17 @@ export default function Home() {
       </h1>
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {isSidebarVisible && (
-          <div className="sidebar" style={{ width: '250px', backgroundColor: '#333', color: '#fff', padding: '20px' }}>
-            <button>Performance</button>
-            <button>Bot Buffet API</button>
-            <button>Tutorial</button>
-            <button>Download</button>
-            <button>BT Ranking</button>
-            <button>Ask AI</button>
-            <button>Upgrade</button>
-            <button>Contact</button>
-          </div>
+            <div className="sidebar" style={{ width: '150px', backgroundColor: '#333', color: '#fff', padding: '20px' }}>
+  <button style={buttonStyle}>Performance</button>
+  <button style={buttonStyle}>Bot Buffet API</button>
+  <button style={buttonStyle}>Tutorial</button>
+  <button style={buttonStyle}>Download</button>
+  <button style={buttonStyle}>BT Ranking</button>
+  <button style={buttonStyle}>Ask AI</button>
+  <button style={buttonStyle}>Upgrade</button>
+  <button style={buttonStyle}>Contact</button>
+</div>
+
         )}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <div style={{ flex: 1, overflow: 'auto' }}>
