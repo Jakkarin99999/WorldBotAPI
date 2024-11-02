@@ -189,30 +189,38 @@ export default function Home() {
         <>
           <table
             {...getTableProps()}
-            style={{ border: '1px solid black', width: '100%', marginBottom: '20px', textAlign: 'center' }}
+            style={{ border: '2px solid Navy', width: '100%', marginBottom: '20px', textAlign: 'center' }}
           >
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()} style={{ background: '#f0f0f0' }}>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      style={{
-                        border: '1px solid black',
-                        padding: '5px',
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                      }}
-                    >
-                      {column.render('Header')}
-                      <span>
-                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                      </span>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
+<thead>
+  {headerGroups.map((headerGroup) => (
+    <tr
+      {...headerGroup.getHeaderGroupProps()}
+      style={{
+        background: 'Navy', // Change background color to Navy
+        color: 'White', // Change font color to White
+      }}
+    >
+      {headerGroup.headers.map((column) => (
+        <th
+          {...column.getHeaderProps(column.getSortByToggleProps())}
+          style={{
+            border: '2px solid Gold', // Keep or modify the border color as needed
+            padding: '5px',
+            cursor: 'pointer',
+            textAlign: 'center',
+            color: 'White', // Ensure font color is White
+          }}
+        >
+          {column.render('Header')}
+          <span>
+            {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+          </span>
+        </th>
+      ))}
+    </tr>
+  ))}
+</thead>
+
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
                 prepareRow(row);
@@ -222,7 +230,7 @@ export default function Home() {
                       <td
                         {...cell.getCellProps()}
                         style={{
-                          border: '1px solid black',
+                          border: '0.5px solid Grey',
                           padding: '5px',
                           height: '20px',
                           overflow: 'hidden',
