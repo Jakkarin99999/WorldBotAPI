@@ -1,0 +1,122 @@
+import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+export default function ExpertAdvisorPage() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10; // จำนวนรายการต่อหน้า
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('Expert_Advisor')
+      .select('*')
+      .range((page - 1) * itemsPerPage, page * itemsPerPage - 1);
+
+    if (error) {
+      console.error('Error fetching data:', error);
+    } else {
+      setData(data);
+    }
+    setLoading(false);
+  };
+
+  const handleUpdate = async (id, column, value) => {
+    const { error } = await supabase
+      .from('Expert_Advisor')
+      .update({ [column]: value })
+      .eq('ea_token', id);
+
+    if (error) {
+      console.error('Error updating data:', error);
+    } else {
+      fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดต
+    }
+  };
+
+  const handleInputChange = (e, id, column) => {
+    const updatedValue = e.target.value;
+    handleUpdate(id, column, updatedValue);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
+  const prevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  return (
+    <div>
+      <h1>Expert Advisor Table</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ea_token</th>
+              <th>name</th>
+              <th>ranks</th>
+              <th>realm</th>
+              <th>dev_name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row) => (
+              <tr key={row.ea_token}>
+                <td>{row.ea_token}</td>
+                <td>
+                  <input
+                    type="text"
+                    defaultValue={row.name}
+                    onBlur={(e) => handleInputChange(e, row.ea_token, 'name')}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    defaultValue={row.ranks}
+                    onBlur={(e) => handleInputChange(e, row.ea_token, 'ranks')}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    defaultValue={row.realm}
+                    onBlur={(e) => handleInputChange(e, row.ea_token, 'realm')}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    defaultValue={row.dev_name}
+                    onBlur={(e) => handleInputChange(e, row.ea_token, 'dev_name')}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <div style={{ marginTop: '20px' }}>
+        <button onClick={prevPage} disabled={page === 1}>
+          Previous
+        </button>
+        <span style={{ margin: '0 10px' }}>Page {page}</span>
+        <button onClick={nextPage}>Next</button>
+      </div>
+    </div>
+  );
+}

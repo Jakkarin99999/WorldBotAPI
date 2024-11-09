@@ -1,0 +1,120 @@
+/* src/components/Sidebar.css */
+.sidebar {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #123456, #654321);
+    padding: 20px;
+    transition: width 0.3s;
+    overflow: hidden;
+    color: white;
+  }
+  
+  .sidebar.left {
+    left: 0;
+    width: 250px;
+  }
+  
+  .sidebar.right {
+    right: 0;
+    width: 250px;
+  }
+  
+  .sidebar.collapsed {
+    width: 50px;
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .toggle-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .sidebar-content {
+    margin-top: 20px;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to right, #011234, #1e225e );
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    background-blend-mode: 50%;
+  }
+  
+  button:hover {
+    background: #202123;
+  }
+  
+  .profile-placeholder {
+    width: 100%;
+    height: 100px;
+    background-color: black;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  /* Add this to Sidebar.css or globals.css */
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar button:hover {
+    background-color: #a86161; /* Change this to your desired hover color */
+  }
+  
+  .sidebarContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    justify-content: space-between; /* Space out top and bottom sections */
+    padding: 20px;
+    background-color: #1F2A44; /* Background color for sidebar */
+  }
+  
+  .sidebarTop,
+  .sidebarBottom {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebarButton {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #1F2A44; /* Button background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebarButton:hover {
+    background-color: #37C9C6; /* Hover color */
+  }
+  
