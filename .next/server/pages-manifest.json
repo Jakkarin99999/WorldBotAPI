@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/ea": "pages/ea.js",
   "/[uuid]": "pages/[uuid].js",
-  "/api/fetchData": "pages/api/fetchData.js",
-  "/tutorial": "pages/tutorial.js",
-  "/performance": "pages/performance.js",
-  "/": "pages/index.js"
+  "/api/expert_advisors": "pages/api/expert_advisors.js"
 }

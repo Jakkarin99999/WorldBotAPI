@@ -15,11 +15,6 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/[uuid]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -35,15 +30,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/performance": [
+    "/ea": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/performance.js"
-    ],
-    "/tutorial": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/tutorial.js"
+      "static/chunks/pages/ea.js"
     ]
   },
   "ampFirstPages": []
