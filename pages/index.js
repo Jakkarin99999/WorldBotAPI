@@ -453,4 +453,3 @@ const getStarRating = (score) => {
     </div>
   );
 }
-
