@@ -34,3 +34,24 @@
 //     res.status(500).json({ success: false, message: 'Server error' });
 //   }
 // }
+
+import { useRouter } from 'next/router';
+
+const DynamicPage = () => {
+  const router = useRouter();
+  const { uuid } = router.query;
+
+  // Redirect or handle specific routes
+  if (uuid === 'install') {
+    return null; // Prevent rendering for `/install`
+  }
+
+  return (
+    <div>
+      <h1>UUID Page</h1>
+      <p>This is a dynamic page for UUID routes.</p>
+    </div>
+  );
+};
+
+export default DynamicPage;
