@@ -194,18 +194,24 @@ const Activation = () => {
   
 
   const handleDeleteRow = async (uuid_install) => {
+    const confirmation = window.confirm("Are you sure you want to delete this row?");
+    if (!confirmation) {
+      // หากผู้ใช้กด Cancel ให้ยกเลิกการลบ
+      return;
+    }
+  
     try {
       const { error } = await supabase
         .from("EA_Lock")
         .delete()
         .eq("uuid_install", uuid_install);
-
+  
       if (error) {
         console.error("Error deleting row:", error);
         alert("ไม่สามารถลบข้อมูลได้ กรุณาลองใหม่");
         return;
       }
-
+  
       fetchRows(email);
       setRankInfo((prev) => ({
         ...prev,
@@ -216,6 +222,7 @@ const Activation = () => {
       console.error("Error in handleDeleteRow:", error);
     }
   };
+  
 
   const handleSaveProfile = async () => {
     try {
@@ -388,9 +395,9 @@ const Activation = () => {
       <button
         onClick={() => setShowProfilePopup(true)}
         style={{
-          backgroundColor: "#FFD700",
+          backgroundColor: "#011a40",
           color: "white",
-          border: "0px solid #FFD700",
+          border: "0px solid #011a40",
           borderRadius: "5px",
           padding: "5px 10px",
           cursor: "pointer",
@@ -401,9 +408,9 @@ const Activation = () => {
       <button
         onClick={() => setShowResetPasswordPopup(true)}
         style={{
-          backgroundColor: "#FFD700",
+          backgroundColor: "#011a40",
           color: "white",
-          border: "0px solid #FFD700",
+          border: "0px solid #011a40",
           borderRadius: "5px",
           padding: "5px 10px",
           cursor: "pointer",
@@ -483,7 +490,7 @@ const Activation = () => {
         minWidth: "150px", // ปรับขนาดขั้นต่ำ
         maxWidth: "200px", // จำกัดความกว้างสูงสุด
         fontSize: "16px",
-        backgroundColor: "#002D72",
+        backgroundColor: "#007423",
         color: "white",
         border: "none",
         borderRadius: "5px",
@@ -491,7 +498,7 @@ const Activation = () => {
         flexShrink: 0, // ป้องกันปุ่มหดตัว
       }}
     >
-      Add Row
+      Activate
     </button>
   </div>
 </div>
@@ -614,7 +621,7 @@ const Activation = () => {
                   onClick={() => handleEditClick(row)}
                   style={{
                     backgroundColor: "#FFD700",
-                    color: "white",
+                    color: "black",
                     border: "none",
                     padding: "5px 10px",
                     borderRadius: "5px",

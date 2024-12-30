@@ -1,0 +1,110 @@
+// import { useState } from "react";
+// import { useRouter } from "next/router";
+
+// const FixedHeader = ({ onProfileClick, onResetPasswordClick }) => {
+//   const [showMenu, setShowMenu] = useState(false);
+//   const router = useRouter();
+
+//   const handleMenuClick = (path) => {
+//     setShowMenu(false);
+//     router.push(path);
+//   };
+
+//   return (
+//     <header
+//       style={{
+//         backgroundColor: "#002D72",
+//         color: "white",
+//         padding: "20px",
+//         textAlign: "center",
+//         position: "sticky",
+//         top: 0,
+//         zIndex: 10,
+//       }}
+//     >
+//       <h1 style={{ marginBottom: "5px" }}>Bot Activation</h1>
+//       <p style={{ margin: "5px 0", fontSize: "15px", color: "#FFD700" }}>
+//         Welcome to WorldBotRank
+//       </p>
+//       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+//         <div style={{ position: "relative", display: "inline-block" }}>
+//           <button
+//             onClick={() => setShowMenu((prev) => !prev)}
+//             style={{
+//               backgroundColor: "transparent",
+//               border: "none",
+//               cursor: "pointer",
+//             }}
+//           >
+//             <img
+//               src="/alien-icon.png" // ใส่รูป icon ที่นี่
+//               alt="Menu"
+//               style={{ width: "40px", borderRadius: "50%" }}
+//             />
+//           </button>
+//           {showMenu && (
+//             <div
+//               style={{
+//                 position: "absolute",
+//                 right: 0,
+//                 top: "50px",
+//                 backgroundColor: "#002D72", // เปลี่ยนพื้นหลังเป็นสีน้ำเงินเข้ม
+//                 color: "white", // ตัวอักษรสีขาว
+//                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+//                 borderRadius: "5px",
+//                 overflow: "hidden",
+//               }}
+//             >
+//               <button
+//                 onClick={() => handleMenuClick("/dashboard")}
+//                 style={menuButtonStyle}
+//               >
+//                 Dashboard
+//               </button>
+//               <button
+//                 onClick={() => handleMenuClick("/activation")}
+//                 style={menuButtonStyle}
+//               >
+//                 Activation
+//               </button>
+//               <button
+//                 onClick={() => handleMenuClick("/worldbotrank")}
+//                 style={menuButtonStyle}
+//               >
+//                 WorldBotRank
+//               </button>
+//               <button
+//                 onClick={onProfileClick}
+//                 style={menuButtonStyle}
+//               >
+//                 Profile
+//               </button>
+//               <button
+//                 onClick={onResetPasswordClick}
+//                 style={menuButtonStyle}
+//               >
+//                 Reset Password
+//               </button>
+//             </div>
+//           )}
+
+//         </div>
+//       </div>
+//     </header>
+//   );
+// };
+
+// const menuButtonStyle = {
+//     width: "100%",
+//     padding: "10px",
+//     textAlign: "left",
+//     border: "none",
+//     backgroundColor: "#002D72", // สีน้ำเงินเข้ม
+//     color: "white", // ตัวอักษรสีขาว
+//     cursor: "pointer",
+//     borderBottom: "1px solid #ddd",
+//     fontSize: "14px",
+//   };
+  
+
+// export default FixedHeader;
