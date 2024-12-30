@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid"; // UUID สำหรับสร้าง unique id
 
+
 // Initialize Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -99,19 +100,18 @@ const Activation = () => {
         throw pinError;
       }
   
-      // Update rankInfo
-      if (rankInfo) {
-        setRankInfo((prev) => ({
-          ...prev,
-          activated: eaData.length,
-          expired_date: pinData?.expired_date, // เพิ่ม expired_date
-        }));
-      }
+      // อัปเดต rankInfo พร้อมจำนวนพอร์ตที่ใช้แล้ว
+      setRankInfo((prev) => ({
+        ...prev,
+        activated: eaData.length, // นับจำนวนแถวใน EA_Lock
+        expired_date: pinData?.expired_date, // เพิ่ม expired_date
+      }));
     } catch (error) {
       console.error("Error fetching data:", error);
       setRows([]);
     }
   };
+  
   
 
 
