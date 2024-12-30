@@ -415,213 +415,235 @@ const Activation = () => {
     </div>
   </header>
   <div
+  style={{
+    padding: "20px",
+    borderRadius: "8px",
+    backgroundColor: "#f5f5f5",
+    boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+    overflowX: "auto", // เพิ่ม scrollbar แนวนอน
+    whiteSpace: "nowrap", // ป้องกันการตัดคำ
+  }}
+>
+  <h3>Add New Bot Activation Row</h3>
+  <div
     style={{
-      padding: "20px",
-      borderRadius: "8px",
-      backgroundColor: "#f5f5f5",
+      display: "flex",
+      justifyContent: "flex-start", // เปลี่ยนให้จัดเรียงด้านซ้ายเพื่อให้ scrollbar ใช้งานได้ดี
+      gap: "10px",
+      flexWrap: "wrap", // ทำให้ responsive ได้
+      overflowX: "auto", // เพิ่ม scrollbar สำหรับเนื้อหายาว
+    }}
+  >
+    <input
+      type="text"
+      placeholder="EA Token"
+      value={formData.ea_token}
+      onChange={(e) => setFormData({ ...formData, ea_token: e.target.value })}
+      style={{
+        padding: "10px",
+        minWidth: "200px", // ใช้ความกว้างขั้นต่ำ
+        maxWidth: "300px", // จำกัดความกว้างสูงสุด
+        flex: "1",
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+      }}
+    />
+    <input
+      type="number"
+      placeholder="Port Number"
+      value={formData.port_number}
+      onChange={(e) => setFormData({ ...formData, port_number: e.target.value })}
+      style={{
+        padding: "10px",
+        minWidth: "200px",
+        maxWidth: "300px",
+        flex: "1",
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+      }}
+    />
+    <input
+      type="text"
+      placeholder="Symbol"
+      value={formData.symbol}
+      onChange={(e) => setFormData({ ...formData, symbol: e.target.value })}
+      style={{
+        padding: "10px",
+        minWidth: "200px",
+        maxWidth: "300px",
+        flex: "1",
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+      }}
+    />
+    <button
+      onClick={handleAddRow}
+      style={{
+        padding: "10px",
+        minWidth: "150px", // ปรับขนาดขั้นต่ำ
+        maxWidth: "200px", // จำกัดความกว้างสูงสุด
+        fontSize: "16px",
+        backgroundColor: "#002D72",
+        color: "white",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        flexShrink: 0, // ป้องกันปุ่มหดตัว
+      }}
+    >
+      Add Row
+    </button>
+  </div>
+</div>
+
+
+
+  <div style={{ marginTop: "20px", overflowX: "auto", border: "1px solid #ddd", borderRadius: "8px" }}>
+  <table
+    style={{
+      width: "100%",
+      borderCollapse: "collapse",
+      marginBottom: "20px",
+      minWidth: "800px", // กำหนดความกว้างขั้นต่ำ
       boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
     }}
   >
-    <h3>Add New Bot Activation Row</h3>
-    <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-      <input
-        type="text"
-        placeholder="EA Token"
-        value={formData.ea_token}
-        onChange={(e) => setFormData({ ...formData, ea_token: e.target.value })}
-        style={{
-          padding: "10px",
-          width: "500px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
-      <input
-        type="number"
-        placeholder="Port Number"
-        value={formData.port_number}
-        onChange={(e) => setFormData({ ...formData, port_number: e.target.value })}
-        style={{
-          padding: "10px",
-          width: "500px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
-      <input
-        type="text"
-        placeholder="Symbol"
-        value={formData.symbol}
-        onChange={(e) => setFormData({ ...formData, symbol: e.target.value })}
-        style={{
-          padding: "10px",
-          width: "500px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
-      <button
-        onClick={handleAddRow}
-        style={{
-          padding: "10px 10px",
-          width: "400px",
-          fontSize: "16px",
-          backgroundColor: "#002D72",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Add Row
-      </button>
-    </div>
-  </div>
-
-  <div style={{ marginTop: "20px" }}>
-    <table
-      style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        marginBottom: "20px",
-        boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
-      }}
-    >
-      <thead style={{ backgroundColor: "#002D72", color: "white" }}>
-        <tr>
-          <th style={{ padding: "10px", borderRight: "1px solid white" }}>#</th>
-          <th style={{ padding: "10px", borderRight: "1px solid white" }}>EA Token</th>
-          <th style={{ padding: "10px", borderRight: "1px solid white" }}>Port Number</th>
-          <th style={{ padding: "10px", borderRight: "1px solid white" }}>Symbol</th>
-          <th style={{ padding: "10px", borderRight: "1px solid white" }}>Last Updated</th>
-          <th style={{ padding: "10px" }}>Actions</th>
+    <thead style={{ backgroundColor: "#002D72", color: "white" }}>
+      <tr>
+        <th style={{ padding: "10px", borderRight: "1px solid white" }}>#</th>
+        <th style={{ padding: "10px", borderRight: "1px solid white" }}>EA Token</th>
+        <th style={{ padding: "10px", borderRight: "1px solid white" }}>Port Number</th>
+        <th style={{ padding: "10px", borderRight: "1px solid white" }}>Symbol</th>
+        <th style={{ padding: "10px", borderRight: "1px solid white" }}>Last Updated</th>
+        <th style={{ padding: "10px" }}>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row, index) => (
+        <tr key={row.uuid_install} style={{ backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white" }}>
+          <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
+            {index + 1}
+          </td>
+          <td style={{ padding: "10px", borderRight: "1px solid #ccc" }}>
+            {editRow?.uuid_install === row.uuid_install ? (
+              <input
+                type="text"
+                value={editRow.ea_token}
+                onChange={(e) => setEditRow({ ...editRow, ea_token: e.target.value })}
+                style={{
+                  width: "100%",
+                  padding: "5px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              />
+            ) : (
+              row.ea_token
+            )}
+          </td>
+          <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
+            {editRow?.uuid_install === row.uuid_install ? (
+              <input
+                type="number"
+                value={editRow.port_number}
+                onChange={(e) => setEditRow({ ...editRow, port_number: e.target.value })}
+                style={{
+                  width: "100%",
+                  padding: "5px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              />
+            ) : (
+              row.port_number
+            )}
+          </td>
+          <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
+            {editRow?.uuid_install === row.uuid_install ? (
+              <input
+                type="text"
+                value={editRow.symbol}
+                onChange={(e) => setEditRow({ ...editRow, symbol: e.target.value })}
+                style={{
+                  width: "100%",
+                  padding: "5px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              />
+            ) : (
+              row.symbol
+            )}
+          </td>
+          <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
+            {row.date_update ? new Date(row.date_update).toLocaleString() : "N/A"}
+          </td>
+          <td style={{ padding: "10px", textAlign: "center" }}>
+            {editRow?.uuid_install === row.uuid_install ? (
+              <div style={{ display: "flex", gap: "5px", justifyContent: "center" }}>
+                <button
+                  onClick={handleEditSave}
+                  style={{
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setEditRow(null)}
+                  style={{
+                    backgroundColor: "#DC143C",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: "5px", justifyContent: "center" }}>
+                <button
+                  onClick={() => handleEditClick(row)}
+                  style={{
+                    backgroundColor: "#FFD700",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteRow(row.uuid_install)}
+                  style={{
+                    backgroundColor: "#DC143C",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </td>
         </tr>
-      </thead>
-      <tbody>
-  {rows.map((row, index) => (
-    <tr key={row.uuid_install} style={{ backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white" }}>
-      <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
-        {index + 1}
-      </td>
-      <td style={{ padding: "10px", borderRight: "1px solid #ccc" }}>
-        {editRow?.uuid_install === row.uuid_install ? (
-          <input
-            type="text"
-            value={editRow.ea_token}
-            onChange={(e) => setEditRow({ ...editRow, ea_token: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "5px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-            }}
-          />
-        ) : (
-          row.ea_token
-        )}
-      </td>
-      <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
-        {editRow?.uuid_install === row.uuid_install ? (
-          <input
-            type="number"
-            value={editRow.port_number}
-            onChange={(e) => setEditRow({ ...editRow, port_number: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "5px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-            }}
-          />
-        ) : (
-          row.port_number
-        )}
-      </td>
-      <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
-        {editRow?.uuid_install === row.uuid_install ? (
-          <input
-            type="text"
-            value={editRow.symbol}
-            onChange={(e) => setEditRow({ ...editRow, symbol: e.target.value })}
-            style={{
-              width: "100%",
-              padding: "5px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-            }}
-          />
-        ) : (
-          row.symbol
-        )}
-      </td>
-      <td style={{ padding: "10px", textAlign: "center", borderRight: "1px solid #ccc" }}>
-        {row.date_update ? new Date(row.date_update).toLocaleString() : "N/A"}
-      </td>
-      <td style={{ padding: "10px", textAlign: "center" }}>
-        {editRow?.uuid_install === row.uuid_install ? (
-          <div style={{ display: "flex", gap: "5px", justifyContent: "center" }}>
-            <button
-              onClick={handleEditSave}
-              style={{
-                backgroundColor: "#4CAF50",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Save
-            </button>
-            <button
-              onClick={() => setEditRow(null)}
-              style={{
-                backgroundColor: "#DC143C",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <div style={{ display: "flex", gap: "5px", justifyContent: "center" }}>
-            <button
-              onClick={() => handleEditClick(row)}
-              style={{
-                backgroundColor: "#FFD700",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDeleteRow(row.uuid_install)}
-              style={{
-                backgroundColor: "#DC143C",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
-</table>
+      ))}
+    </tbody>
+  </table>
+
 </div>
 
 
